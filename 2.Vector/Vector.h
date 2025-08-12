@@ -104,6 +104,16 @@ public:
 		data[index] = value;
 	}
 
+	T* begin()
+	{
+		return data;
+	}
+
+	T* end()
+	{
+		return data + size;
+	}
+
 private:
 	void ReAllocate(int newCapacity)
 	{
