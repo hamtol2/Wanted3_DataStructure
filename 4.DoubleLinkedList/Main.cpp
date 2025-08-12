@@ -1,3 +1,5 @@
+#include "PreCompiledHeader.h"
+
 #include <iostream>
 #include "LinkedList.h"
 
