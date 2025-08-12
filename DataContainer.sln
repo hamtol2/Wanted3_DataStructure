@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "2.Vector", "2.Vector\2.Vect
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Recursive", "Recursive\Recursive.vcxproj", "{23A55C5E-00C0-4178-93DD-6CBFCFF57652}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3.LinkedList", "3.LinkedList\3.LinkedList.vcxproj", "{65357A70-9C3C-471E-A7A9-BB27A5779BCA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{23A55C5E-00C0-4178-93DD-6CBFCFF57652}.Release|x64.Build.0 = Release|x64
 		{23A55C5E-00C0-4178-93DD-6CBFCFF57652}.Release|x86.ActiveCfg = Release|Win32
 		{23A55C5E-00C0-4178-93DD-6CBFCFF57652}.Release|x86.Build.0 = Release|Win32
+		{65357A70-9C3C-471E-A7A9-BB27A5779BCA}.Debug|x64.ActiveCfg = Debug|x64
+		{65357A70-9C3C-471E-A7A9-BB27A5779BCA}.Debug|x64.Build.0 = Debug|x64
+		{65357A70-9C3C-471E-A7A9-BB27A5779BCA}.Debug|x86.ActiveCfg = Debug|Win32
+		{65357A70-9C3C-471E-A7A9-BB27A5779BCA}.Debug|x86.Build.0 = Debug|Win32
+		{65357A70-9C3C-471E-A7A9-BB27A5779BCA}.Release|x64.ActiveCfg = Release|x64
+		{65357A70-9C3C-471E-A7A9-BB27A5779BCA}.Release|x64.Build.0 = Release|x64
+		{65357A70-9C3C-471E-A7A9-BB27A5779BCA}.Release|x86.ActiveCfg = Release|Win32
+		{65357A70-9C3C-471E-A7A9-BB27A5779BCA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
