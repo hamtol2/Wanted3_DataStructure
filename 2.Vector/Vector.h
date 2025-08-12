@@ -3,6 +3,8 @@
 #include <iostream>
 
 // 동적으로(실행중에) 크기가 변하는 배열.
+// 템플릿은 같은 파일에 구현까지 해야함.
+// inl(inline).
 template<typename T>
 class Vector
 {
@@ -38,6 +40,70 @@ public:
 		++size;
 	}
 
+	// RValue Reference.
+	void PushBack(T&& value)
+	{
+		if (size == capacity)
+		{
+			ReAllocate(capacity * 2);
+		}
+
+		// 핵심. Move Semantic.
+		data[size] = std::move(value);
+		++size;
+	}
+
+	// 접근 및 설정을 위한 인덱스 연산자 오버로딩.
+	T& operator[](int index)
+	{
+		// 예외 처리(Out of Index/Range).
+		if (index < 0 || index >= size)
+		{
+			// 디버그 모드에서 동작하며, 중단점이 설정됨.
+			__debugbreak();
+		}
+
+		return data[index];
+	}
+
+	// 접근 및 설정을 위한 인덱스 연산자 오버로딩.
+	const T& operator[](int index) const
+	{
+		// 예외 처리(Out of Index/Range).
+		if (index < 0 || index >= size)
+		{
+			// 디버그 모드에서 동작하며, 중단점이 설정됨.
+			__debugbreak();
+		}
+
+		return data[index];
+	}
+
+	// 접근 함수/설정 함수.
+	T& At(int index)
+	{
+		// 예외 처리(Out of Index/Range).
+		if (index < 0 || index >= size)
+		{
+			// 디버그 모드에서 동작하며, 중단점이 설정됨.
+			__debugbreak();
+		}
+
+		return data[index];
+	}
+
+	void Set(int index, const T& value)
+	{
+		// 예외 처리(Out of Index/Range).
+		if (index < 0 || index >= size)
+		{
+			// 디버그 모드에서 동작하며, 중단점이 설정됨.
+			__debugbreak();
+		}
+
+		data[index] = value;
+	}
+
 private:
 	void ReAllocate(int newCapacity)
 	{
@@ -52,7 +118,7 @@ private:
 		memcpy(newBlock, data, sizeof(T) * capacity);
 		//for (int ix = 0; ix < capacity; ++ix)
 		//{
-		//	newBlock[ix] = data[ix];
+		//	newBlock[ix] = std::move(data[ix]);
 		//}
 
 		// 3. 다쓴 메모리 공간 해제 및 업데이트.
@@ -67,7 +133,7 @@ private:
 	int Capacity() const { return capacity; }
 
 private:
-	// 자료 컨테이트.
+	// 자료 컨테이너.
 	T* data = nullptr;
 
 	// 배열에 실제로 저장된 요소의 수.
