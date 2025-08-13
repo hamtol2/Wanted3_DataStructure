@@ -7,8 +7,13 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
+//#include <vector>
+
 int main()
 {
+	//std::vector<int> testVector;
+	//testVector.reserve(100);		// 왜 쓰는지? 재할당 최소화.
+
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	// 리스트 생성.
