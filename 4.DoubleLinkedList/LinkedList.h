@@ -85,6 +85,77 @@ public:
 		++count;
 	}
 
+	// 첫 위치에 새로운 노드 추가하는 함수.
+	void PushFirst(const T& newData)
+	{
+		// 추가할 노드 생성.
+		Node<T>* newNode = new Node<T>();
+		newNode->data = newData;
+
+		// [f]->next <- newNode
+		// [f]->newNode->[f->next]
+		// [f]<-newNode
+		Node<T>* next = first->next;
+		newNode->next = next;
+		first->next = newNode;
+		newNode->previous = first;
+		next->previous = newNode;
+
+		// 저장 개수 증가 처리.
+		++count;
+	}
+
+	// 삭제 함수.
+	void Delete(const T& deleteData)
+	{
+		// 비어 있는 상태.
+		if (first->next == nullptr)
+		{
+			std::cout << "리스트가 비어 있어 노드를 삭제할 수 없습니다.\n";
+			return;
+		}
+
+		// 검색 시작.
+		Node<T>* deleteNode = first->next;
+
+		// 종료조건 #2.
+		while (deleteNode && deleteNode != last)
+		{
+			// 삭제할 노드를 찾은 경우.
+			// 종료 조건 #1.
+			if (deleteNode->data == deleteData)
+			{
+				break;
+			}
+
+			// 못찾았으면 다음 노드를 이어서 검색 진행.
+			deleteNode = deleteNode->next;
+		}
+
+		// 삭제.
+		// 찾았는지 확인.
+		if (!deleteNode || deleteNode == last)
+		{
+			std::cout << "삭제할 노드를 찾지 못했습니다.\n";
+			return;
+		}
+
+		// 삭제 진행.
+		// 2번을 지운다고 가정.
+		// ..[0]->[1]->[2]->[3]->[l]->nullptr.
+		// ..[0]->[1]->[3]->[l]->nullptr.
+
+		// 앞뒤의 포인터 정리.
+		deleteNode->previous->next = deleteNode->next;
+		deleteNode->next->previous = deleteNode->previous;
+
+		// 노드 삭제.
+		SafeDelete(deleteNode);
+
+		// 저장 수 감소 처리.
+		--count;
+	}
+
 	// 출력.
 	void Print()
 	{
