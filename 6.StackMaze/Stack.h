@@ -10,21 +10,7 @@
 * 최대 저장 크기가 설정됨.
 */
 
-// 객체 설계?
-// 1. 필요한 변수 고민 및 선언.
-// 2. 제공해야하는 기능을 메소드로 작성.
-// 메소드(메시지(public)/메소드(private/protected)).
-// 객체 간의 소통은 메시지(public 메소드)로만 함.
-// -> 변수는 모두 감춘다.
-
-// 최대 저장 수.
-#define TEST 0
-
-#if TEST
-const int stackCount = 1;
-#else
 const int stackCount = 100;
-#endif
 
 template<typename T>
 class Stack
