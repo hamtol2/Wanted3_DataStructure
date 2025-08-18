@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "11.QueueMaze", "11.QueueMaz
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "12.Deque", "12.Deque\12.Deque.vcxproj", "{B0CB26C4-FFFB-4E07-9024-F537AF75538D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "13.HashTable", "13.HashTable\13.HashTable.vcxproj", "{129C97F0-15D3-464D-B8DE-C0BAEE9EC4FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -141,6 +143,14 @@ Global
 		{B0CB26C4-FFFB-4E07-9024-F537AF75538D}.Release|x64.Build.0 = Release|x64
 		{B0CB26C4-FFFB-4E07-9024-F537AF75538D}.Release|x86.ActiveCfg = Release|Win32
 		{B0CB26C4-FFFB-4E07-9024-F537AF75538D}.Release|x86.Build.0 = Release|Win32
+		{129C97F0-15D3-464D-B8DE-C0BAEE9EC4FB}.Debug|x64.ActiveCfg = Debug|x64
+		{129C97F0-15D3-464D-B8DE-C0BAEE9EC4FB}.Debug|x64.Build.0 = Debug|x64
+		{129C97F0-15D3-464D-B8DE-C0BAEE9EC4FB}.Debug|x86.ActiveCfg = Debug|Win32
+		{129C97F0-15D3-464D-B8DE-C0BAEE9EC4FB}.Debug|x86.Build.0 = Debug|Win32
+		{129C97F0-15D3-464D-B8DE-C0BAEE9EC4FB}.Release|x64.ActiveCfg = Release|x64
+		{129C97F0-15D3-464D-B8DE-C0BAEE9EC4FB}.Release|x64.Build.0 = Release|x64
+		{129C97F0-15D3-464D-B8DE-C0BAEE9EC4FB}.Release|x86.ActiveCfg = Release|Win32
+		{129C97F0-15D3-464D-B8DE-C0BAEE9EC4FB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
