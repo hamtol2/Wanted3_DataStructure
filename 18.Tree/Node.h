@@ -11,6 +11,11 @@ public:
 	{
 	}
 
+	Node(const T& data)
+		: data(data), parent(nullptr)
+	{
+	}
+
 	// 복사 생성자 제거.
 	Node(const Node& other) = delete;
 //private:
@@ -44,7 +49,12 @@ public:
 		return data;
 	}
 
-	List<Node<T>*>& GetChildren() const
+	const List<Node<T>*>& GetChildren() const
+	{
+		return children;
+	}
+
+	List<Node<T>*>& GetChildren()
 	{
 		return children;
 	}
