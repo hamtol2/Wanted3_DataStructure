@@ -15,7 +15,16 @@ public:
 
 	~Tree()
 	{
-		// Todo: 자손 모두 삭제하는 함수 구현 후 호출 해야 함.
+		// 자손 모두 삭제.
+		List<Node<T>*>& children = root->GetChildren();
+		while (children.Size() > 0)
+		{
+			root->RemoveChild(children[0]);
+		}
+
+		// 루트 제거.
+		delete root;
+		root = nullptr;
 	}
 
 	void AddChild(const T& parentData, const T& childData)
@@ -33,6 +42,45 @@ public:
 
 		// 부모 노드 검색 실패.
 		std::cout << "해당 값을 갖는 부모 노드 검색에 실패했습니다.\n";
+	}
+
+	bool Remove(const T& data)
+	{
+		// 삭제할 노드를 검색하고, 삭제.
+		Node<T>* outNode = nullptr;
+		bool result = Find(data, outNode);
+
+		// 검색 실패(삭제 실패).
+		if (!result)
+		{
+			std::cout << "삭제할 노드를 찾지 못했습니다.\n";
+			return false;
+		}
+
+		// 검색 성공.
+		// 경우의 수1: 삭제할 노드가 루트 노드인 경우.
+		// 루트는 제거하지 못하게.
+		if (outNode == root)
+		{
+			//// 루트의 자손을 모두 제거.
+			//while (root->GetChildren().Size() > 0)
+			//{
+			//	root->RemoveChild(root->GetChildren()[0]);
+			//}
+
+			//// 루트 노드 제거.
+			//delete root;
+			//root = nullptr;
+			std::cout << "루트 노드는 삭제할 수 없습니다.\n";
+			return false;
+		}
+
+		// 경우의 수2: 루트 노드가 아닌 경우.
+		// 삭제할 노드의 부모 노드에게 삭제할 노드를 제거해달라고 요청.
+		// parent는 항상 null이 아닌지?(보장할 수 있는지?).
+		Node<T>* parent = outNode->GetParent();
+		parent->RemoveChild(outNode);
+		return true;
 	}
 
 	/// <summary>
@@ -80,6 +128,48 @@ public:
 		// 검색 실패.
 		outNode = nullptr;
 		return false;
+	}
+
+	// 전위 순회 함수 (부모를 먼저 방문 -> 자손 방문).
+	void PreorderTraverse()
+	{
+		// 순회 재귀 함수 호출.
+		PreorderTraverseRecursive(root);
+	}
+
+	// 전위 순회 재귀 함수.
+	// node: 방문할 기준 노드.
+	// depth: 출력할 때 부모-자손 구분을 위해 들여쓰기할 값.
+	void PreorderTraverseRecursive(Node<T>* node, int depth = 0)
+	{
+		// 재귀 함수 종료 조건.
+		// if (node == nullptr)
+		if (!node)
+		{
+			return;
+		}
+
+		// 뎊스 출력.
+		for (int ix = 0; ix < depth; ++ix)
+		{
+			std::cout << "    ";
+		}
+
+		// 부모 노드 방문.
+		std::cout << node->GetData() << "\n";
+
+		// 자손 방문.
+		List<Node<T>*>& children = node->GetChildren();
+		if (children.Size() == 0)
+		{
+			return;
+		}
+
+		for (int ix = 0; ix < children.Size(); ++ix)
+		{
+			Node<T>* child = children[ix];
+			PreorderTraverseRecursive(child, depth + 1);
+		}
 	}
 
 private:
