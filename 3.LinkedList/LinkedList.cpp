@@ -1,3 +1,10 @@
+#include "RedBlackTree.h"
+#include "RedBlackTree.h"
+#include "RedBlackTree.h"
+#include "RedBlackTree.h"
+#include "RedBlackTree.h"
+#include "RedBlackTree.h"
+#include "RedBlackTree.h"
 #include "LinkedList.h"
 #include <iostream>
 
@@ -47,6 +54,19 @@ void LinkedList::AddToHead(int newData)
 	newNode->next = head;		// 주소 복사.
 	head = newNode;
 	++count;
+}
+
+RedBlackTree::RedBlackTree()
+{
+}
+
+RedBlackTree::~RedBlackTree()
+{
+}
+
+bool RedBlackTree::Find(int data, Node*& outNode)
+{
+	return false;
 }
 
 // 맨 뒤에 데이터 추가하는 함수.
