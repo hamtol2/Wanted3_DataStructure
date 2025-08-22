@@ -35,7 +35,7 @@ public:
 	std::vector<Node*> FindPath(
 		Node* startNode,
 		Node* goalNode,
-		const std::vector<std::vector<int>>& grid
+		/*const */std::vector<std::vector<int>>& grid
 	);
 
 	// 그리드 출력 함수.
@@ -61,6 +61,8 @@ private:
 
 	// 현재 지점에서 목표 지점까지의 추정 비용 계산 함수.
 	float CalculateHeuristic(Node* currentNode, Node* goalNode);
+	
+	void DisplayGrid(std::vector<std::vector<int>>& grid);
 
 private:
 	// 열린 리스트(방문할 노드의 목록).

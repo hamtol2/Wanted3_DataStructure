@@ -1,5 +1,6 @@
 #include "AStar.h"
 #include "Node.h"
+#include <Windows.h>
 
 AStar::AStar()
 {
@@ -21,7 +22,9 @@ AStar::~AStar()
 	closedList.clear();
 }
 
-std::vector<Node*> AStar::FindPath(Node* startNode, Node* goalNode, const std::vector<std::vector<int>>& grid)
+std::vector<Node*> AStar::FindPath(
+	Node* startNode, Node* goalNode, 
+	/*const */std::vector<std::vector<int>>& grid)
 {
 	// 시작 노드 / 목표 노드 저장.
 	this->startNode = startNode;
@@ -150,12 +153,20 @@ std::vector<Node*> AStar::FindPath(Node* startNode, Node* goalNode, const std::v
 				|| openListNode->gCost > neighborNode->gCost
 				|| openListNode->fCost > neighborNode->fCost)
 			{
+				// 방문할 노드를 특정 값으로 설정.
+				grid[newY][newX] = 5;
+
 				openList.emplace_back(neighborNode);
 			}
 			else
 			{
 				SafeDelete(neighborNode);
 			}
+
+			// 딜레이.
+			DisplayGrid(grid);
+			int delay = (int)(0.1f * 1000);
+			Sleep(delay);
 		}
 	}
 
@@ -166,12 +177,27 @@ void AStar::DisplayGridWithPath(
 	std::vector<std::vector<int>>& grid, 
 	const std::vector<Node*>& path)
 {
-	for (const Node* node : path)
+	static COORD position = { 0, 0 };
+	static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(handle, position);
+
+	int white = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+	int green = FOREGROUND_GREEN;
+
+	// 구분을 위해 설정했던 데이터 초기화.
+	for (int y = 0; y < grid.size(); ++y)
 	{
-		// 경로는 '2'로 표시.
-		grid[node->position.y][node->position.x] = 2;
+		for (int x = 0; x < grid[0].size(); ++x)
+		{
+			int& value = grid[y][x];
+			if (value == 2 || value == 3 || value == 5)
+			{
+				value = 0;
+			}
+		}
 	}
 
+	// 경로를 제외한 맵 출력.
 	for (int y = 0; y < grid.size(); ++y)
 	{
 		for (int x = 0; x < grid[0].size(); ++x)
@@ -179,23 +205,36 @@ void AStar::DisplayGridWithPath(
 			// 장애물.
 			if (grid[y][x] == 1)
 			{
+				SetConsoleTextAttribute(handle, white);
 				std::cout << "1 ";
 			}
 
-			// 경로.
-			else if (grid[y][x] == 2)
-			{
-				std::cout << "* ";
-			}
 
 			// 빈 공간.
 			else if (grid[y][x] == 0)
 			{
+				SetConsoleTextAttribute(handle, white);
 				std::cout << "0 ";
 			}
 		}
 
 		std::cout << "\n";
+	}
+
+	// 경로 출력.
+	for (const Node* node : path)
+	{
+		// 경로는 '2'로 표시.
+		COORD position{ 
+			static_cast<short>(node->position.x * 2), 
+			static_cast<short>(node->position.y) 
+		};
+		SetConsoleCursorPosition(handle, position);
+		SetConsoleTextAttribute(handle, green);
+
+		std::cout << "* ";
+		int delay = static_cast<int>(0.05f * 1000);
+		Sleep(delay);
 	}
 }
 
@@ -287,4 +326,57 @@ float AStar::CalculateHeuristic(Node* currentNode, Node* goalNode)
 
 	// 대각선 길이 구하기. 
 	return (float)std::sqrt(diff.x * diff.x + diff.y * diff.y);
+}
+
+void AStar::DisplayGrid(std::vector<std::vector<int>>& grid)
+{
+	static COORD position = { 0, 0 };
+	static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(handle, position);
+
+	int white = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+	int green = FOREGROUND_GREEN;
+
+	for (int y = 0; y < grid.size(); ++y)
+	{
+		for (int x = 0; x < grid[0].size(); ++x)
+		{
+			// 시작 위치.
+			if (grid[y][x] == 2)
+			{
+				SetConsoleTextAttribute(handle, FOREGROUND_RED);
+				std::cout << "S ";
+			}
+
+			// 목표 위치.
+			if (grid[y][x] == 3)
+			{
+				SetConsoleTextAttribute(handle, FOREGROUND_RED);
+				std::cout << "G ";
+			}
+
+			// 장애물.
+			if (grid[y][x] == 1)
+			{
+				SetConsoleTextAttribute(handle, white);
+				std::cout << "1 ";
+			}
+
+			// 경로.
+			else if (grid[y][x] == 5)
+			{
+				SetConsoleTextAttribute(handle, green);
+				std::cout << "+ ";
+			}
+
+			// 빈 공간.
+			else if (grid[y][x] == 0)
+			{
+				SetConsoleTextAttribute(handle, white);
+				std::cout << "0 ";
+			}
+		}
+
+		std::cout << "\n";
+	}
 }
