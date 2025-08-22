@@ -11,7 +11,7 @@ void SafeDelete(T*& resource)
 	}
 }
 
-Node* RedBlackTree::nil = nullptr;
+//Node* RedBlackTree::nil = nullptr;
 
 RedBlackTree::RedBlackTree()
 {
@@ -28,7 +28,8 @@ RedBlackTree::RedBlackTree()
 
 RedBlackTree::~RedBlackTree()
 {
-	// Todo: 재귀적으로 모든 노드를 삭제하는 함수 작성 후 호출.
+	// 재귀적으로 모든 노드를 삭제하는 함수 호출.
+	DestroyRecursive(root);
 	
 	// Nil 노드 삭제.
 	SafeDelete(nil);
@@ -90,6 +91,11 @@ bool RedBlackTree::Insert(int data)
 
 	// 삽입 후 정리.
 	RestructureAfterInsert(newNode);
+}
+
+void RedBlackTree::Print(int depth, int blackCount)
+{
+	PrintRecursive(root, depth, blackCount);
 }
 
 bool RedBlackTree::FindRecursive(int data, Node* node, Node*& outNode)
@@ -176,7 +182,7 @@ void RedBlackTree::RestructureAfterInsert(Node* newNode)
 			// 할아버지 기준으로 다시 검사.
 			if (uncle->GetColor() == Color::Red)
 			{
-				// 부모/삼촌을 빨간색으로 변경.
+				// 부모/삼촌을 검정색으로 변경.
 				newNode->GetParent()->SetColor(Color::Black);
 				uncle->SetColor(Color::Black);
 
@@ -196,14 +202,20 @@ void RedBlackTree::RestructureAfterInsert(Node* newNode)
 			// Case3(일직선)으로 변경 후 문제 해결 시도.
 			if (newNode == newNode->GetParent()->GetRight())
 			{
-				// Todo: 좌회전.
+				// 좌회전.
+				// 부모를 중심으로 회전 처리 (일직선으로 만들기 위해).
+				newNode = newNode->GetParent();
+				RotateToLeft(newNode);
 			}
 
 			// Case3: 부모와 나의 위치가 일직선일 때.
+			// 부모를 Black, 할아버지를 Red로 변경 후, 
+			// 할아버지를 기준으로 회전.
 			newNode->GetParent()->SetColor(Color::Black);
 			newNode->GetParent()->GetParent()->SetColor(Color::Red);
 
-			// Todo: 우회전.
+			// 우회전.
+			RotateToRight(newNode->GetParent()->GetParent());
 		}
 
 		// 부모가 할아버지 기준 오른쪽 자손일 때.
@@ -217,7 +229,7 @@ void RedBlackTree::RestructureAfterInsert(Node* newNode)
 			// 할아버지 기준으로 다시 검사.
 			if (uncle->GetColor() == Color::Red)
 			{
-				// 부모/삼촌을 빨간색으로 변경.
+				// 부모/삼촌을 검정색으로 변경.
 				newNode->GetParent()->SetColor(Color::Black);
 				uncle->SetColor(Color::Black);
 
@@ -237,18 +249,29 @@ void RedBlackTree::RestructureAfterInsert(Node* newNode)
 			// Case3(일직선)으로 변경 후 문제 해결 시도.
 			if (newNode == newNode->GetParent()->GetLeft())
 			{
-				// Todo: 우회전.
+				// 우회전.
+				// 부모를 중심으로 회전 처리 (일직선으로 만들기 위해).
+				newNode = newNode->GetParent();
+				RotateToRight(newNode);
 			}
 
 			// Case3: 부모와 나의 위치가 일직선일 때.
+			// 부모를 Black, 할아버지를 Red로 변경 후, 
+			// 할아버지를 기준으로 회전.
 			newNode->GetParent()->SetColor(Color::Black);
 			newNode->GetParent()->GetParent()->SetColor(Color::Red);
 
-			// Todo: 좌회전.
+			// 좌회전.
+			RotateToLeft(newNode->GetParent()->GetParent());
 		}
 	}
+
+	// 루트 노드 색상 정리.
+	root->SetColor(Color::Black);
 }
 
+// 회전: 부모와 자손의 위치를 바꾸는 기능.
+// 좌회전 -> 왼쪽으로 회전. 오른쪽 자손과 부모의 위치를 교환.
 void RedBlackTree::RotateToLeft(Node* node)
 {
 	// 오른쪽 자손 노드.
@@ -296,6 +319,150 @@ void RedBlackTree::RotateToLeft(Node* node)
 	node->SetParent(right);
 }
 
+// 회전: 부모와 자손의 위치를 바꾸는 기능.
+// 우회전 -> 오른쪽으로 회전. 왼쪽 자손과 부모의 위치를 교환.
 void RedBlackTree::RotateToRight(Node* node)
 {
+	// 왼쪽 자손 노드.
+	Node* left = node->GetLeft();
+
+	// 왼쪽 자손의 오른쪽 자손 노드를 부모의 왼쪽 자손으로 등록.
+	// 이진 탐색 트리 특징의 의해 왼쪽 자손의 모든 자손은 부모보다 작음.
+	node->SetLeft(left->GetRight());
+
+	// 부모 정리.
+	if (left->GetRight() != nil)
+	{
+		left->GetRight()->SetParent(node);
+	}
+
+	// 부모가 root인 경우.
+	if (left->GetParent() == root)
+	{
+		// 루트 변경.
+		root = left;
+		left->SetParent(nullptr);
+	}
+
+	// 부모가 root가 아닌 경우.
+	else
+	{
+		// 조부모 기준으로 부모가 어디에 있었는지 확인.
+		if (node == node->GetParent()->GetLeft())
+		{
+			node->GetParent()->SetLeft(left);
+		}
+		else
+		{
+			node->GetParent()->SetRight(left);
+		}
+	}
+
+	// 왼쪽 자손의 오른쪽 자손으로 부모 노드 등록.
+	left->SetRight(node);
+
+	// 왼쪽 자손의 부모를 조부모로 설정.
+	left->SetParent(node->GetParent());
+
+	// 부모의 부모를 왼쪽 자손으로 설정.
+	node->SetParent(left);
+}
+
+void RedBlackTree::PrintRecursive(Node* node, int depth, int blackCount)
+{
+	// 탈출 조건.
+	if (node == nil)
+	{
+		return;
+	}
+
+	// 노드 색상이 검정이면 blackCount 증가.
+	if (node->GetColor() == Color::Black)
+	{
+		++blackCount;
+	}
+
+	// 부모 표기 문자열 설정.
+	int parentData = 0;
+	const char* position = "Root";
+
+	// 부모 노드가 있는지 확인.
+	if (node->GetParent())
+	{
+		// 부모 노드의 데이터 저장.
+		parentData = node->GetParent()->GetData();
+
+		// 부모 노드로부터 현재 노드의 위치 설정.
+		if (node == node->GetParent()->GetLeft())
+		{
+			position = "Left";
+		}
+		else
+		{
+			position = "Right";
+		}
+	}
+
+	// 검은색 수 출력을 위한 문자열.
+	char blackCountString[50] = { };
+
+	// 자손이 없으면 현재까지의 검은색 노드 수 설정.
+	if (node->GetLeft() == nil && node->GetRight() == nil)
+	{
+		sprintf_s(blackCountString, "------ %d", blackCount);
+	}
+
+	// Depth 출력.
+	for (int ix = 0; ix < depth; ++ix)
+	{
+		std::cout << "  ";
+	}
+
+	// 노드 색상에 따른 콘솔 설정.
+	if (node->GetColor() == Color::Red)
+	{
+		SetTextColor(TextColor::Red);
+	}
+	else
+	{
+		SetTextColor(TextColor::White);
+	}
+
+	// 현재 노드 값 출력.
+	std::cout
+		<< node->GetData() << " "
+		<< node->GetColorString() << " ["
+		<< position << ", "
+		<< parentData << "] "
+		<< blackCountString << "\n";
+
+	// 노드를 출력한 뒤에는 콘솔 원래대로.
+	SetTextColor(TextColor::White);
+
+	// 하위 노드 출력.
+	PrintRecursive(node->GetLeft(), depth + 1, blackCount);
+	PrintRecursive(node->GetRight(), depth + 1, blackCount);
+}
+
+void RedBlackTree::DestroyRecursive(Node* node)
+{
+	// 재귀 탈출 조건.
+	if (node == nil)
+	{
+		return;
+	}
+
+	// 자식이 있는 경우.
+	DestroyRecursive(node->GetLeft());
+	DestroyRecursive(node->GetRight());
+
+	// 노드 삭제.
+	SafeDelete(node);
+}
+
+void SetTextColor(TextColor color)
+{
+	// 콘솔 색상 설정.
+	static HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, static_cast<WORD>(color));
 }

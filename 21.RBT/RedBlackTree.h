@@ -2,6 +2,7 @@
 
 #include "Node.h"
 #include <iostream>
+#include <Windows.h>
 
 class RedBlackTree
 {
@@ -14,6 +15,9 @@ public:
 
 	// 추가.
 	bool Insert(int data);
+
+	// 출력 함수.
+	void Print(int depth = 0, int blackCount = 0);
 
 private:
 
@@ -41,11 +45,29 @@ private:
 	// 우회전 함수.
 	void RotateToRight(Node* node);
 
+	// 출력 재귀 함수.
+	void PrintRecursive(Node* node, int depth, int blackCount);
+
+	// 트리 파괴 재귀 함수.
+	void DestroyRecursive(Node* node);
+
 private:
 
 	// 루트 노드.
 	Node* root = nullptr;
 
 	// Nil 노드.
-	static Node* nil;
+	/*static */Node* nil = nullptr;
 };
+
+enum class TextColor
+{
+	// 콘솔 색상 정의.
+	Red = FOREGROUND_RED,
+	Green = FOREGROUND_GREEN,
+	Blue = FOREGROUND_BLUE,
+	White = Red | Green | Blue,
+};
+
+// 콘솔 색상 변경 함수.
+void SetTextColor(TextColor color);
