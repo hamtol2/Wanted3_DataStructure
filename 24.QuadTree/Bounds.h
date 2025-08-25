@@ -13,6 +13,11 @@ public:
 	{
 	}
 
+	Bounds(const Bounds& other)
+		: x(other.x), y(other.y), width(other.width), height(other.height)
+	{
+	}
+
 	// 겹침 판정 함수.
 	bool Intersects(const Bounds& other) const;
 

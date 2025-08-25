@@ -56,6 +56,20 @@ public:
 	Node* GetBottomRight() const { return bottomRight; }
 
 private:
+
+	// 겹치는지 또는 포함되는지를 확인하는 함수.
+	NodeIndex TestRegion(const Bounds& bounds);
+
+	// 요청한 Bounds와 겹치는 4분면 목록 반환 함수.
+	std::vector<NodeIndex> GetQuads(const Bounds& bounds);
+
+	// 4분면 분할 함수.
+	bool Subdivide();
+
+	// 분할됐는지 확인하는 함수.
+	bool IsDivided();
+
+private:
 	// 깊이.
 	int depth = 0;
 
