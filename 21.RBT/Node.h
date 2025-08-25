@@ -1,3 +1,6 @@
+#include "Node.h"
+#include "Node.h"
+#include "Node.h"
 #pragma once
 
 // 노드의 색상을 나타내는 열거형.
@@ -11,6 +14,9 @@ class Node
 {
 public:
 	Node(int data, Color color = Color::Red);
+	inline Node::Node(const Bounds& bounds, int depth)
+	{
+	}
 	~Node() = default;
 
 	// 데이터 필드.

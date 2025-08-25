@@ -47,7 +47,8 @@ std::vector<Node*> AStar::FindPath(
 	while (!openList.empty())
 	{
 		// 가장 비용이 작은 노드 선택 (선형 탐색으로 검색).
-		// 최적화 가능 -> 가장 작은 값을 빠르게 찾을 수 있도록.
+		// 최적화 가능 -> 가장 작은 값을 빠르게 찾을 수 있도록. (힙-Heap).
+		// 이진 트리의 종류 (최소/최대 노드 루트).
 		Node* lowestNode = openList[0];
 		for (Node* node : openList)
 		{
@@ -150,7 +151,7 @@ std::vector<Node*> AStar::FindPath(
 
 			// 노드가 목록에 없거나 비용이 싸면, 새 노드 추가.
 			if (openListNode == nullptr
-				|| openListNode->gCost > neighborNode->gCost
+				/*|| openListNode->gCost > neighborNode->gCost*/
 				|| openListNode->fCost > neighborNode->fCost)
 			{
 				// 방문할 노드를 특정 값으로 설정.

@@ -62,6 +62,8 @@ int main()
         }
         std::cout << "¸ñÇ¥ µµÂø\n";
 
+        Sleep(5000);
+
         // °æ·Î Å½»ö °á°ú 2Â÷¿ø ¸Ê Ãâ·Â.
         std::cout << "°æ·Î¸¦ ¸Ê¿¡ Ç¥½ÃÇÑ °á°ú:\n";
         aStar.DisplayGridWithPath(grid, path);
